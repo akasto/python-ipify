@@ -6,11 +6,17 @@ This module contains internal settings that make our ipify library simpler.
 """
 
 
-from platform import mac_ver, win32_ver, linux_distribution, system
+from platform import mac_ver, win32_ver, system
 from sys import version_info as vi
 
 from . import __version__
 
+try:
+    from platform import linux_distribution
+    linux_system_release = linux_distribution()[0]
+except:
+    from platform import release
+    linux_system_release = release()
 
 # This is the ipify service base URI.  This is where all API requests go.
 API_URI = 'https://api.ipify.org'
@@ -21,7 +27,7 @@ MAX_TRIES = 3
 # This dictionary is used to dynamically select the appropriate platform for
 # the user agent string.
 OS_VERSION_INFO = {
-    'Linux': '%s' % (linux_distribution()[0]),
+    'Linux': '%s' % (linux_system_release),
     'Windows': '%s' % (win32_ver()[0]),
     'Darwin': '%s' % (mac_ver()[0]),
 }
